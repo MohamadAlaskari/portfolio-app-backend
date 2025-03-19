@@ -25,7 +25,4 @@ export class Category {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @OneToMany(() => Project, (project) => project.category)
-  projects: Project[];
 }

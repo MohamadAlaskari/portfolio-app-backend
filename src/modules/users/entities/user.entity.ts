@@ -27,7 +27,4 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @OneToMany(() => Project, (project) => project.user)
-  projects: Project[];
 }

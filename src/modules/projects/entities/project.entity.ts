@@ -31,10 +31,4 @@ export class Project {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @ManyToOne(() => Category, (category) => category.projects, { eager: true })
-  category: Category;
-
-  @ManyToOne(() => User, (user) => user.projects, { eager: true })
-  user: User;
 }
