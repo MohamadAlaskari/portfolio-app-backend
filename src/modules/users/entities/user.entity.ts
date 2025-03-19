@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Project } from '../../projects/entities/project.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('users')
 export class User {
@@ -27,4 +28,8 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ApiProperty({ type: () => [Project] })
+  @OneToMany(() => Project, (project) => project.user, { cascade: true })
+  projects: Project[];
 }

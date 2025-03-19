@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Category } from 'src/modules/categories/entities/category.entity';
 import { User } from 'src/modules/users/entities/user.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('projects')
 export class Project {
@@ -31,4 +32,12 @@ export class Project {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ApiProperty({ type: () => User })
+  @ManyToOne(() => User, (user) => user.projects, { onDelete: 'CASCADE' })
+  user: User;
+
+  @ApiProperty({ type: () => Category, nullable: true })
+  @ManyToOne(() => Category, (category) => category.projects, { nullable: true, onDelete: 'SET NULL' })
+  category: Category;
 }
