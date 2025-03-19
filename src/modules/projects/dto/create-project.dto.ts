@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   IsNotEmpty,
   IsString,
@@ -25,6 +26,14 @@ export class CreateProjectDto {
   @IsOptional()
   @IsUrl()
   imageUrl?: string;
+
+  @ApiProperty({
+    example: 'https://github.com/username/repository',
+    required: false,
+  })
+  @IsOptional()
+  @IsUrl()
+  githubLink?: string;
 
   @ApiProperty({ example: 'https://projekt-link.com', required: false })
   @IsOptional()

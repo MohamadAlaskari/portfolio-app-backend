@@ -1,14 +1,6 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-} from 'typeorm';
-
-import { Project } from 'src/modules/projects/entities/project.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Project } from '../../projects/entities/project.entity';
 
 @Entity('categories')
 export class Category {
@@ -19,22 +11,6 @@ export class Category {
   @ApiProperty()
   @Column({ unique: true })
   name: string;
-
-  @ApiProperty()
-  @Column({ nullable: true })
-  description: string;
-
-  @ApiProperty({
-    example: 'https://github.com/username/repository',
-    description: 'Link to the project GitHub repository',
-  })
-  @Column({ nullable: true })
-  githubLink: string;
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   @ApiProperty({ type: () => [Project] })
   @OneToMany(() => Project, (project) => project.category, { cascade: true })

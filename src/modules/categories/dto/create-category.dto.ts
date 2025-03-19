@@ -6,12 +6,4 @@ export class CreateCategoryDto {
   @IsNotEmpty()
   @IsString()
   name: string;
-
-  @ApiProperty({
-    example: 'Alle Projekte im Bereich Webentwicklung',
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  description?: string;
 }
