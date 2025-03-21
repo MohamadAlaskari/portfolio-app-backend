@@ -1,47 +1,52 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-import {
-  IsNotEmpty,
-  IsString,
-  IsUrl,
-  IsOptional,
-  IsNumber,
-} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional, IsUUID, IsUrl } from 'class-validator';
 
 export class CreateProjectDto {
   @ApiProperty({
-    example: 'Portfolio-Webseite',
     description: 'Titel des Projekts',
+    example: 'Portfolio Website',
   })
   @IsNotEmpty()
-  @IsString()
   title: string;
 
-  @ApiProperty({ example: 'Eine Beschreibung...', required: false })
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @ApiProperty({ example: 'https://image.com/meinbild.jpg', required: false })
-  @IsOptional()
-  @IsUrl()
-  imageUrl?: string;
+  @ApiProperty({
+    description: 'Beschreibung des Projekts',
+    example: 'Ein Portfolio mit Angular',
+  })
+  @IsNotEmpty()
+  description: string;
 
   @ApiProperty({
-    example: 'https://github.com/username/repository',
+    description: 'Bild-URL des Projekts',
+    example: 'https://example.com/project.jpg',
     required: false,
   })
   @IsOptional()
   @IsUrl()
-  githubLink?: string;
+  img_url?: string;
 
-  @ApiProperty({ example: 'https://projekt-link.com', required: false })
+  @ApiProperty({
+    description: 'Repository-URL des Projekts',
+    example: 'https://github.com/user/project',
+    required: false,
+  })
   @IsOptional()
   @IsUrl()
-  link?: string;
+  repo_url?: string;
 
-  @ApiProperty({ example: 1, description: 'ID der Kategorie' })
-  @IsNotEmpty()
-  @IsNumber()
-  categoryId: number;
+  @ApiProperty({
+    description: 'Live-URL des Projekts',
+    example: 'https://project-live.com',
+    required: false,
+  })
+  @IsOptional()
+  @IsUrl()
+  live_url?: string;
+
+  @ApiProperty({
+    description: 'Kategorie-ID des Projekts',
+    example: '3f29b98d-88e6-4d44-90b3-0a5c1c2c712f',
+  })
+  @IsUUID()
+  category_id: string;
 }

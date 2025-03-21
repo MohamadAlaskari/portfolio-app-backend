@@ -1,23 +1,57 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  MinLength,
+  IsEnum,
+} from 'class-validator';
 
 export class CreateUserDto {
-  @ApiProperty({ example: 'John Doe', description: 'The name of the user' })
-  @IsNotEmpty()
-  name: string;
-
   @ApiProperty({
+    description: 'E-Mail-Adresse des Benutzers',
     example: 'user@example.com',
-    description: 'The email of the user',
   })
   @IsEmail()
   email: string;
 
   @ApiProperty({
-    example: 'securepassword',
-    description: 'The password of the user',
+    description: 'Passwort des Benutzers (mind. 6 Zeichen)',
+    example: 'password123',
   })
   @IsNotEmpty()
   @MinLength(6)
   password: string;
+
+  @ApiProperty({ description: 'Vorname des Benutzers', example: 'John' })
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ description: 'Nachname des Benutzers', example: 'Doe' })
+  @IsNotEmpty()
+  last_name: string;
+
+  @ApiProperty({
+    description: 'Profilbild-URL',
+    example: 'https://example.com/profile.jpg',
+    required: false,
+  })
+  @IsOptional()
+  profile_image?: string;
+
+  @ApiProperty({
+    description: 'Kurzbeschreibung des Benutzers',
+    example: 'Full-Stack Developer',
+    required: false,
+  })
+  @IsOptional()
+  bio?: string;
+
+  @ApiProperty({
+    description: 'Systemrolle des Benutzers',
+    enum: ['admin', 'user'],
+    default: 'user',
+  })
+  @IsEnum(['admin', 'user'])
+  system_role: 'admin' | 'user';
 }

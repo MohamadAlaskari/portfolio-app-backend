@@ -1,42 +1,66 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../../users/entities/user.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+} from 'typeorm';
 import { Category } from '../../categories/entities/category.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('projects')
 export class Project {
-  @ApiProperty()
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  @ApiProperty({ description: 'Eindeutige ID des Projekts' })
+  id: string;
 
-  @ApiProperty()
   @Column()
+  @ApiProperty({
+    description: 'Titel des Projekts',
+    example: 'Portfolio Website',
+  })
   title: string;
 
-  @ApiProperty({ nullable: true })
+  @Column({ type: 'text' })
+  @ApiProperty({
+    description: 'Beschreibung des Projekts',
+    example: 'Ein persönliches Portfolio mit Angular',
+  })
+  description: string;
+
   @Column({ nullable: true })
-  description?: string;
+  @ApiProperty({
+    description: 'Bild-URL des Projekts',
+    example: 'https://example.com/project.jpg',
+  })
+  img_url?: string;
 
-  @ApiProperty({ nullable: true })
   @Column({ nullable: true })
-  imageUrl?: string;
+  @ApiProperty({
+    description: 'Repository-URL des Projekts',
+    example: 'https://github.com/user/project',
+  })
+  repo_url?: string;
 
-  @ApiProperty({ nullable: true })
   @Column({ nullable: true })
-  githubLink?: string;
+  @ApiProperty({
+    description: 'Live-URL des Projekts',
+    example: 'https://project-live.com',
+  })
+  live_url?: string;
 
-  @ApiProperty({ nullable: true })
-  @Column({ nullable: true })
-  link?: string;
-
-  @ApiProperty({ type: () => User })
-  @ManyToOne(() => User, (user) => user.projects, { onDelete: 'CASCADE' })
-  user: User;
-
-  @ApiProperty({ type: () => Category, nullable: true })
   @ManyToOne(() => Category, (category) => category.projects, {
-    nullable: true,
     onDelete: 'SET NULL',
   })
+  @ApiProperty({ description: 'Kategorie des Projekts', type: () => Category })
   category: Category;
+
+  @CreateDateColumn()
+  @ApiProperty({ description: 'Erstellungsdatum' })
+  created_at: Date;
+
+  @UpdateDateColumn()
+  @ApiProperty({ description: 'Aktualisierungsdatum' })
+  updated_at: Date;
 }

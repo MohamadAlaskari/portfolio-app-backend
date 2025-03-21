@@ -1,0 +1,94 @@
+portfolio-app-backend/
+│── src/
+│   │── common/                        # Gemeinsame Utility-Funktionen & Middleware
+│   │   │── decorators/                 # Eigene Decorators
+│   │   │   │── roles.decorator.ts       # Rollenbasierter Decorator für Admin/User
+│   │   │── filters/                     # Globale Fehler-Filter
+│   │   │   │── global-exception.filter.ts # Globaler Exception-Filter für Errors
+│   │   │── guards/                      # Auth- und Rollen-Guards
+│   │   │   │── jwt-auth.guard.ts         # JWT Auth-Guard für Endpunkte
+│   │   │   │── roles.guard.ts            # Rollenbasierter Guard für Admin/User
+│   │   │── interceptors/                # Interceptors für Transformationen
+│   │   │   │── logging.interceptor.ts    # Logging-Interceptor für Requests
+│   │   │── utils/                       # Allgemeine Hilfsfunktionen
+│   │   │   │── hash.util.ts              # Utility für Passwort-Hashing
+│   │   │   │── response.util.ts          # Utility für standardisierte API-Responses
+│   │
+│   │── database/                         # Datenbank-Setup
+│   │   │── config/                        # Datenbank-Konfiguration
+│   │   │   │── database.config.ts          # MySQL Config mit TypeORM
+│   │   │   │── typeorm.config.ts           # TypeORM spezifische Konfiguration
+│   │   │── migrations/                     # TypeORM Migrations
+│   │   │   │── 20240321_create_users.ts     # Migration für Users-Tabelle
+│   │   │   │── 20240321_create_projects.ts  # Migration für Projects-Tabelle
+│   │   │── seeders/                        # Seeder für Testdaten
+│   │   │   │── seed-users.ts                # Seeder für Test-User
+│   │   │   │── seed-categories.ts           # Seeder für Kategorien
+│   │   │── database.module.ts               # Datenbank-Modul für TypeORM
+│   │
+│   │── modules/                            # Hauptmodule des Backends
+│   │   │── auth/                           # Authentifizierungsmodul
+│   │   │   │── dto/
+│   │   │   │   │── login.dto.ts             # DTO für Login
+│   │   │   │   │── register.dto.ts          # DTO für Registrierung
+│   │   │   │── filters/                     # Auth-spezifische Filter
+│   │   │   │   │── auth-exception.filter.ts # Fehlerbehandlung für Auth-Module
+│   │   │   │── auth.controller.ts           # Authentifizierungs-Controller
+│   │   │   │── auth.service.ts              # Service für Authentifizierung
+│   │   │   │── auth.module.ts               # Auth-Modul
+│   │   │   │── auth.strategy.ts             # JWT Strategie
+│   │   │   │── tests/                       # Tests für Auth-Modul
+│   │
+│   │   │── users/                          # Benutzer-Modul
+│   │   │   │── dto/
+│   │   │   │   │── create-user.dto.ts       # DTO für User-Registrierung
+│   │   │   │   │── update-user.dto.ts       # DTO für User-Update
+│   │   │   │── entities/                    # User-Entity
+│   │   │   │   │── user.entity.ts
+│   │   │   │── filters/                     # User-spezifische Filter
+│   │   │   │   │── user-exception.filter.ts # Fehlerhandling für User-Module
+│   │   │   │── users.controller.ts          # User-Controller
+│   │   │   │── users.service.ts             # Service für Benutzerverwaltung
+│   │   │   │── users.module.ts              # User-Modul
+│   │   │   │── tests/                       # Tests für User-Modul
+│   │
+│   │   │── categories/                      # Kategorien-Modul
+│   │   │   │── dto/
+│   │   │   │   │── create-category.dto.ts   # DTO für neue Kategorie
+│   │   │   │   │── update-category.dto.ts   # DTO für Update einer Kategorie
+│   │   │   │── entities/                    # Category-Entity
+│   │   │   │   │── category.entity.ts
+│   │   │   │── filters/                     # Kategorie-spezifische Filter
+│   │   │   │   │── category-exception.filter.ts # Fehlerhandling für Kategorien
+│   │   │   │── categories.controller.ts     # Kategorie-Controller
+│   │   │   │── categories.service.ts        # Kategorie-Service
+│   │   │   │── categories.module.ts         # Kategorie-Modul
+│   │   │   │── tests/                       # Tests für Kategorie-Modul
+│   │
+│   │   │── projects/                        # Projekte-Modul
+│   │   │   │── dto/
+│   │   │   │   │── create-project.dto.ts    # DTO für neues Projekt
+│   │   │   │   │── update-project.dto.ts    # DTO für Projekt-Update
+│   │   │   │── entities/                    # Project-Entity
+│   │   │   │   │── project.entity.ts
+│   │   │   │── filters/                     # Projekt-spezifische Filter
+│   │   │   │   │── project-exception.filter.ts # Fehlerhandling für Projekte
+│   │   │   │── projects.controller.ts       # Projekt-Controller
+│   │   │   │── projects.service.ts          # Projekt-Service
+│   │   │   │── projects.module.ts           # Projekt-Modul
+│   │   │   │── tests/                       # Tests für Projekt-Modul
+│   │
+│   │── main.ts                             # Haupteinstiegspunkt der App
+│   │── app.module.ts                        # Hauptmodul
+│   │── app.controller.ts                    # Hauptcontroller
+│   │── app.service.ts                       # Hauptservice
+│
+│── test/                                    # End-to-End Tests
+│── .env                                     # Umgebungsvariablen
+│── .eslintrc.js                             # Linter-Konfiguration
+│── .prettierrc                              # Prettier-Konfiguration
+│── Dockerfile                               # Docker-Konfiguration
+│── docker-compose.yml                       # Docker Compose für lokale Umgebung
+│── package.json                             # Abhängigkeiten & Scripts
+│── tsconfig.json                             # TypeScript Konfiguration
+│── README.md                                # Dokumentation
