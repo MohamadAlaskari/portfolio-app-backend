@@ -4,9 +4,16 @@ import { ProjectsModule } from './modules/projects/projects.module';
 import { UsersModule } from './modules/users/users.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { AppController } from './app.controller';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [DatabaseModule, ProjectsModule, UsersModule, CategoriesModule],
+  imports: [
+    ConfigModule.forRoot({ envFilePath: '.env.development', isGlobal: true }),
+    DatabaseModule,
+    UsersModule,
+    CategoriesModule,
+    ProjectsModule,
+  ],
   controllers: [AppController],
   providers: [],
 })
