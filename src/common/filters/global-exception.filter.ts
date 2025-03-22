@@ -3,44 +3,68 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
-  BadRequestException,
-  NotFoundException,
-  ForbiddenException,
-  UnauthorizedException,
+  HttpStatus,
+  Logger,
 } from '@nestjs/common';
+import { Response, Request } from 'express';
+
+/**
+ * Interface für eine standardisierte Fehlerantwort.
+ */
+interface ErrorDetails {
+  message?: string;
+  [key: string]: any; // Erlaubt zusätzliche Fehlerdetails
+}
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
-  catch(exception: any, host: ArgumentsHost) {
+  private readonly logger = new Logger(GlobalExceptionFilter.name);
+
+  catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse();
-    const request = ctx.getRequest();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
 
-    let status = 500;
-    let message = 'An unexpected error occurred.';
+    let status: number = HttpStatus.INTERNAL_SERVER_ERROR;
+    let message: string = 'Ein unerwarteter Fehler ist aufgetreten.';
+    let errorDetails: ErrorDetails | null = null;
 
-    if (exception instanceof BadRequestException) {
+    if (exception instanceof HttpException) {
       status = exception.getStatus();
-      message = 'Invalid input data.';
-    } else if (exception instanceof NotFoundException) {
-      status = exception.getStatus();
-      message = 'The requested resource was not found.';
-    } else if (exception instanceof UnauthorizedException) {
-      status = exception.getStatus();
-      message = 'You are not authorized to access this resource.';
-    } else if (exception instanceof ForbiddenException) {
-      status = exception.getStatus();
-      message = 'Access to this resource is forbidden.';
-    } else if (exception instanceof HttpException) {
-      status = exception.getStatus();
+      const errorResponse = exception.getResponse();
+
+      if (typeof errorResponse === 'string') {
+        message = errorResponse;
+      } else if (
+        typeof errorResponse === 'object' &&
+        errorResponse !== null &&
+        'message' in errorResponse
+      ) {
+        message = (errorResponse as { message?: string }).message || message;
+        errorDetails = errorResponse as ErrorDetails;
+      }
+    } else if (exception instanceof Error) {
       message = exception.message;
     }
 
-    response.status(status).json({
-      statusCode: status,
+    // Logging des Fehlers mit Stacktrace (falls verfügbar)
+    this.logger.error(
+      `🚨 Fehler auf ${request.method} ${request.url}: ${message}`,
+      (exception as Error)?.stack,
+    );
+
+    // Sichere Zuweisung von Status und Fehlerdetails
+    const safeStatus: number =
+      typeof status === 'number' ? status : HttpStatus.INTERNAL_SERVER_ERROR;
+    const safeErrorDetails: ErrorDetails = errorDetails ?? {};
+
+    response.status(safeStatus).json({
+      statusCode: safeStatus,
       path: request.url,
-      message,
+      method: request.method,
       timestamp: new Date().toISOString(),
+      error: message,
+      details: safeErrorDetails, // Enthält zusätzliche Details, falls vorhanden
     });
   }
 }

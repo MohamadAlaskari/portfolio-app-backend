@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseFilters,
 } from '@nestjs/common';
 import { UsersService } from 'src/modules/users/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersExceptionFilter } from './filters/users-exception.filter';
 
 @Controller('users')
+@UseFilters(UsersExceptionFilter)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
