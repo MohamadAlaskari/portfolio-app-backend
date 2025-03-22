@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { UsersExceptionFilter } from './filters/user-exception.filter';
+import { UsersExceptionFilter } from './filters/users-exception.filter';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
