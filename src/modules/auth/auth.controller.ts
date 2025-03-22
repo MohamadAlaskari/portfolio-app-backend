@@ -12,14 +12,14 @@ export class AuthController {
   @Post('login')
   @ApiOperation({ summary: 'Benutzer-Login' })
   @ApiResponse({ status: 200, description: 'Erfolgreiche Authentifizierung' })
-  async login(@Body() loginDto: LoginDto) {
+  login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
   }
 
   @Post('register')
   @ApiOperation({ summary: 'Benutzer-Registrierung' })
   @ApiResponse({ status: 201, description: 'Benutzer erfolgreich registriert' })
-  async register(@Body() createUserDto: CreateUserDto) {
+  register(@Body() createUserDto: CreateUserDto) {
     return this.authService.register(createUserDto);
   }
 }
