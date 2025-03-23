@@ -3,7 +3,7 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { UsersService } from 'src/modules/users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { JWTPayloadTypes } from 'src/common/utils/types';
+import { AccessTokentype, JWTPayloadTypes } from 'src/common/utils/types';
 
 import * as bcrypt from 'bcrypt';
 
@@ -14,13 +14,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(registerDto: RegisterDto) {
+  async register(registerDto: RegisterDto): Promise<AccessTokentype> {
     const createdUser = await this.userService.create(registerDto);
-    // @TODO generate JWT Token
-    return createdUser;
+    //  generate JWT Token
+    return this.generateJWT({ id: createdUser.id, email: createdUser.email });
   }
 
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto): Promise<AccessTokentype> {
     const user = await this.userService.findByEmail(loginDto.email);
     if (!user) {
       throw new UnauthorizedException('invalid email or password');
@@ -32,9 +32,16 @@ export class AuthService {
     }
 
     //  generate JWT Token
-    const payload: JWTPayloadTypes = { id: user.id, email: user.email };
+    return this.generateJWT({ id: user.id, email: user.email });
+  }
+
+  private async generateJWT(payload: JWTPayloadTypes) {
+    const payloadJWT: JWTPayloadTypes = {
+      id: payload.id,
+      email: payload.email,
+    };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      accessToken: await this.jwtService.signAsync(payloadJWT),
     };
   }
 }
