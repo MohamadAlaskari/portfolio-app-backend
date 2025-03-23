@@ -13,7 +13,7 @@ import { AuthModule } from './modules/auth/auth.module';
       envFilePath: ['.env', '.env.development'],
       isGlobal: true,
     }),
-    AuthModule,
+
     DatabaseModule,
     UsersModule,
     CategoriesModule,
