@@ -17,7 +17,11 @@ export class AuthService {
   async register(registerDto: RegisterDto): Promise<AccessTokentype> {
     const createdUser = await this.userService.create(registerDto);
     //  generate JWT Token
-    return this.generateJWT({ id: createdUser.id, email: createdUser.email });
+    const accessToken = await this.generateJWT({
+      id: createdUser.id,
+      email: createdUser.email,
+    });
+    return { accessToken };
   }
 
   async login(loginDto: LoginDto): Promise<AccessTokentype> {
@@ -30,9 +34,12 @@ export class AuthService {
     if (!isMatch) {
       throw new UnauthorizedException('invalid email or password');
     }
-
+    const accessToken = await this.generateJWT({
+      id: user.id,
+      email: user.email,
+    });
     //  generate JWT Token
-    return this.generateJWT({ id: user.id, email: user.email });
+    return { accessToken };
   }
 
   private async generateJWT(payload: JWTPayloadTypes): Promise<string> {
