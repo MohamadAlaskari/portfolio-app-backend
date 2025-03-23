@@ -35,13 +35,11 @@ export class AuthService {
     return this.generateJWT({ id: user.id, email: user.email });
   }
 
-  private async generateJWT(payload: JWTPayloadTypes) {
+  private async generateJWT(payload: JWTPayloadTypes): Promise<string> {
     const payloadJWT: JWTPayloadTypes = {
       id: payload.id,
       email: payload.email,
     };
-    return {
-      accessToken: await this.jwtService.signAsync(payloadJWT),
-    };
+    return await this.jwtService.signAsync(payloadJWT);
   }
 }
