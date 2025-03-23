@@ -12,11 +12,12 @@ import { UsersModule } from '../users/users.module';
     ConfigModule.forRoot(),
     PassportModule,
     JwtModule.registerAsync({
-      imports: [ConfigModule],
       inject: [ConfigService],
+      // imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
+        global: true,
         secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '1h' },
+        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN') },
       }),
     }),
   ],
