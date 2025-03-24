@@ -19,13 +19,18 @@ import { Roles } from './decorators/roles.decorator';
 import { Current_User } from 'src/common/decorators/current-user.decorator';
 import { JWTPayloadTypes } from 'src/common/utils/types';
 import { AuthGuard } from '../auth/guards/auth.guard';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+@ApiBearerAuth() // 🔥 Fügt "Authorization" Header für JWT in Swagger UI hinzu
 @Controller('users')
 @UseGuards(AuthGuard, RolesGuard)
 @UseFilters(UsersExceptionFilter)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiOperation({ summary: 'Create User', description: 'Creates a new user.' })
+  @ApiResponse({ status: 201, description: 'User successfully created.' })
+  @ApiResponse({ status: 400, description: 'Bad request.' })
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -34,6 +39,12 @@ export class UsersController {
   @Get()
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
+  @ApiOperation({
+    summary: 'Get all users',
+    description: 'Only Admins can get all users.',
+  })
+  @ApiResponse({ status: 200, description: 'Users retrieved successfully.' })
+  @ApiResponse({ status: 403, description: 'Forbidden: Only Admins allowed.' })
   findAll() {
     return this.usersService.findAll();
   }
@@ -41,6 +52,12 @@ export class UsersController {
   @Get(':id')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
+  @ApiOperation({
+    summary: 'Get user by ID',
+    description: 'Admin can retrieve any user by ID.',
+  })
+  @ApiResponse({ status: 200, description: 'User found.' })
+  @ApiResponse({ status: 404, description: 'User not found.' })
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
@@ -48,6 +65,16 @@ export class UsersController {
   @Patch(':id')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.USER) // Admins & Benutzer können bearbeiten
+  @ApiOperation({
+    summary: 'Update user',
+    description:
+      'Admins can update any user, users can update their own profile.',
+  })
+  @ApiResponse({ status: 200, description: 'User updated successfully.' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden: You can only update your own profile.',
+  })
   update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -62,6 +89,12 @@ export class UsersController {
   @Delete(':id')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({
+    summary: 'Delete user',
+    description: 'Only Admins can delete a user.',
+  })
+  @ApiResponse({ status: 200, description: 'User deleted successfully.' })
+  @ApiResponse({ status: 403, description: 'Forbidden: Only Admins allowed.' })
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }
