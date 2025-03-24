@@ -32,15 +32,15 @@ export class UsersService {
     );
   }
 
-  async findAll() {
+  async findAll(): Promise<User[]> {
     const users = await this.userRepository.find();
-    if (!users) {
-      return 'No Users vorhanden';
+    if (users.length === 0) {
+      throw new NotFoundException('no Users found.');
     }
     return users;
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<User> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException(`User mit ID ${id} nicht gefunden`);
