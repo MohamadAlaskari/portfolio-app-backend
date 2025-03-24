@@ -21,7 +21,7 @@ import { UsersModule } from '../users/users.module';
       }),
     }),
   ],
-  exports: [AuthService],
+  exports: [],
   controllers: [AuthController],
   providers: [AuthService],
 })

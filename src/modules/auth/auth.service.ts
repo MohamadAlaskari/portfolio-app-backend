@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { UsersService } from 'src/modules/users/users.service';
@@ -27,12 +31,12 @@ export class AuthService {
   async login(loginDto: LoginDto): Promise<AccessTokentype> {
     const user = await this.userService.findByEmail(loginDto.email);
     if (!user) {
-      throw new UnauthorizedException('invalid email or password');
+      throw new UnauthorizedException('Incorrect email or password.');
     }
     const isMatch = await bcrypt.compare(loginDto.password, user.password);
 
     if (!isMatch) {
-      throw new UnauthorizedException('invalid email or password');
+      throw new UnauthorizedException('Incorrect email or password.');
     }
     const accessToken = await this.generateJWT({
       id: user.id,
@@ -40,6 +44,14 @@ export class AuthService {
     });
     //  generate JWT Token
     return { accessToken };
+  }
+
+  async getCurrentUser(id: string) {
+    const user = await this.userService.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+    return user;
   }
 
   private async generateJWT(payload: JWTPayloadTypes): Promise<string> {

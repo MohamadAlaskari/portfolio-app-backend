@@ -10,6 +10,7 @@ export function setupSwagger(app: INestApplication) {
     .setTitle('Portfolio API')
     .setDescription('API Documentation for the Portfolio App')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
