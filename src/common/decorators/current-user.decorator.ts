@@ -9,5 +9,3 @@ export const Current_User = createParamDecorator(
     return user;
   },
 );
-export { JWTPayloadTypes };
-
