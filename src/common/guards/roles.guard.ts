@@ -14,19 +14,27 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
+    const request: Request = context.switchToHttp().getRequest();
+    const user: JWTPayloadTypes = request[CURRENT_USER_KEY] as JWTPayloadTypes;
+    console.log('User in RolesGuard:', user);
+    if (!user) {
+      throw new ForbiddenException('Access denied, no user found');
+    }
     const requiredRoles = this.reflector.get<UserRole[]>(
       'roles',
       context.getHandler(),
     );
+
+    console.log('Required Roles:', requiredRoles);
     if (!requiredRoles) {
       return true;
     }
 
-    const request: Request = context.switchToHttp().getRequest();
-    const user: JWTPayloadTypes = request[CURRENT_USER_KEY] as JWTPayloadTypes;
-
-    if (!user || !requiredRoles.includes(user.role)) {
-      throw new ForbiddenException('Access denied, insufficient permissions');
+    const hasRole = requiredRoles.some((role) => user.role === role);
+    if (!hasRole) {
+      throw new ForbiddenException(
+        'Access denied, insufficient permissions @payload',
+      );
     }
 
     return true;

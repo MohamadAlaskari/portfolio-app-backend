@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CURRENT_USER_KEY } from '../../../common/utils/constants';
+import { CURRENT_USER_KEY } from '../utils/constants';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { JWTPayloadTypes } from 'src/common/utils/types';
@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
           secret: this.configService.get<string>('JWT_SECRET'),
         },
       );
-
+      console.log('Decoded Token:', payload);
       request[CURRENT_USER_KEY] = payload;
     } catch {
       throw new UnauthorizedException('access denied, invalid token');

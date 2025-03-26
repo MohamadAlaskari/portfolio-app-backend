@@ -14,15 +14,15 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersExceptionFilter } from './filters/users-exception.filter';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { UserRole } from 'src/common/utils/enums';
+import { UserRole } from '../../common/utils/enums';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { JWTPayloadTypes } from 'src/common/utils/types';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+//import { AuthGuard } from '../../common/guards/auth.guard';
 
 @Controller('users')
 //@UseGuards(AuthGuard)
-//@ApiBearerAuth()
 @UseFilters(UsersExceptionFilter)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -36,11 +36,11 @@ export class UsersController {
   }
 
   @Get()
-  // @UseGuards(RolesGuard)
-  //@Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({
     summary: 'Get all users',
-    description: 'Only Admins can get all users.',
+    description: 'Only Admins can get all users',
   })
   @ApiResponse({ status: 200, description: 'Users retrieved successfully.' })
   @ApiResponse({ status: 403, description: 'Forbidden: Only Admins allowed.' })
@@ -49,8 +49,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
   @ApiOperation({
     summary: 'Get user by ID',
     description: 'Admin can retrieve any user by ID.',
@@ -63,7 +63,7 @@ export class UsersController {
 
   @Patch(':id')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.USER) // Admins & Benutzer können bearbeiten
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({
     summary: 'Update user',
     description:
