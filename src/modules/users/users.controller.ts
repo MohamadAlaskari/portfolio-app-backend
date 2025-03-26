@@ -13,7 +13,7 @@ import { UsersService } from 'src/modules/users/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersExceptionFilter } from './filters/users-exception.filter';
-import { RolesGuard } from 'src/common/guards/roles.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
 import { UserRole } from 'src/common/utils/enums';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';

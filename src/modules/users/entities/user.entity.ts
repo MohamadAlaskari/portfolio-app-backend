@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserRole } from 'src/common/utils/enums';
+import { UserRole } from '../../../common/utils/enums';
 
 @Entity('users')
 export class User {
