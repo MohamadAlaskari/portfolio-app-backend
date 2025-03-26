@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserRole } from 'src/common/utils/enums';
 
 @Entity('users')
 export class User {
@@ -46,12 +47,12 @@ export class User {
   })
   bio?: string;
 
-  @Column({ type: 'enum', enum: ['admin', 'user'], default: 'user' })
+  @Column({ type: 'enum', enum: UserRole, default: 'user' })
   @ApiProperty({
     description: 'Systemrolle des Benutzers',
-    enum: ['admin', 'user'],
+    enum: UserRole,
   })
-  system_role: 'admin' | 'user';
+  system_role: UserRole;
 
   @CreateDateColumn()
   @ApiProperty({ description: 'Erstellungsdatum' })

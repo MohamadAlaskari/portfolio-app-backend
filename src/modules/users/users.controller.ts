@@ -15,15 +15,14 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersExceptionFilter } from './filters/users-exception.filter';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { UserRole } from 'src/common/utils/enums';
-import { Roles } from './decorators/roles.decorator';
-import { Current_User } from 'src/common/decorators/current-user.decorator';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { JWTPayloadTypes } from 'src/common/utils/types';
-import { AuthGuard } from '../auth/guards/auth.guard';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-@ApiBearerAuth() // 🔥 Fügt "Authorization" Header für JWT in Swagger UI hinzu
 @Controller('users')
-@UseGuards(AuthGuard, RolesGuard)
+//@UseGuards(AuthGuard)
+//@ApiBearerAuth()
 @UseFilters(UsersExceptionFilter)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -37,8 +36,8 @@ export class UsersController {
   }
 
   @Get()
-  @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN)
+  // @UseGuards(RolesGuard)
+  //@Roles(UserRole.ADMIN)
   @ApiOperation({
     summary: 'Get all users',
     description: 'Only Admins can get all users.',
@@ -78,7 +77,7 @@ export class UsersController {
   update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
-    @Current_User() payload: JWTPayloadTypes,
+    @CurrentUser() payload: JWTPayloadTypes,
   ) {
     if (payload.role !== UserRole.ADMIN && payload.id !== id) {
       throw new Error('Access denied. You can only update your own profile.');

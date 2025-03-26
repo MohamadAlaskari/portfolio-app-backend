@@ -6,6 +6,7 @@ import {
   MinLength,
   IsEnum,
 } from 'class-validator';
+import { UserRole } from 'src/common/utils/enums';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -52,6 +53,6 @@ export class CreateUserDto {
     enum: ['admin', 'user'],
     default: 'user',
   })
-  @IsEnum(['admin', 'user'])
-  system_role: 'admin' | 'user';
+  @IsEnum(UserRole)
+  system_role: UserRole;
 }

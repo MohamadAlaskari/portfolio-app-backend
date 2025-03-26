@@ -17,7 +17,7 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JWTPayloadTypes } from '../../common/utils/types';
 import { AuthGuard } from './guards/auth.guard';
-import { Current_User } from '../../common/decorators/current-user.decorator';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -74,7 +74,7 @@ export class AuthController {
     status: 401,
     description: 'Nicht autorisiert, JWT-Token fehlt oder ungültig.',
   })
-  getCurrentUser(@Current_User() payload: JWTPayloadTypes) {
+  getCurrentUser(@CurrentUser() payload: JWTPayloadTypes) {
     return this.authService.getCurrentUser(payload.id);
   }
 }

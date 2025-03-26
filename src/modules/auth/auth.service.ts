@@ -10,7 +10,6 @@ import { JwtService } from '@nestjs/jwt';
 import { AccessTokentype, JWTPayloadTypes } from 'src/common/utils/types';
 
 import * as bcrypt from 'bcrypt';
-import { UserRole } from 'src/common/utils/enums';
 
 @Injectable()
 export class AuthService {
@@ -25,7 +24,7 @@ export class AuthService {
     const accessToken = await this.generateJWT({
       id: createdUser.id,
       email: createdUser.email,
-      role: UserRole.USER,
+      role: createdUser.system_role,
     });
     return { accessToken };
   }
@@ -43,7 +42,7 @@ export class AuthService {
     const accessToken = await this.generateJWT({
       id: user.id,
       email: user.email,
-      role: UserRole.USER,
+      role: user.system_role,
     });
     //  generate JWT Token
     return { accessToken };
@@ -58,11 +57,6 @@ export class AuthService {
   }
 
   private async generateJWT(payload: JWTPayloadTypes): Promise<string> {
-    const payloadJWT: JWTPayloadTypes = {
-      id: payload.id,
-      email: payload.email,
-      role: UserRole.USER,
-    };
-    return await this.jwtService.signAsync(payloadJWT);
+    return await this.jwtService.signAsync(payload);
   }
 }
