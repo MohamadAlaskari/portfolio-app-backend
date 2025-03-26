@@ -6,9 +6,11 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    JwtModule,
     ConfigModule.forRoot({
       envFilePath: ['.env', '.env.development'],
       isGlobal: true,
@@ -20,6 +22,6 @@ import { AuthModule } from './modules/auth/auth.module';
     ProjectsModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [JwtService],
 })
 export class AppModule {}
