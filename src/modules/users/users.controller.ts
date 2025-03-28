@@ -18,11 +18,12 @@ import { UserRole } from '../../common/utils/enums';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { JWTPayloadTypes } from 'src/common/utils/types';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-//import { AuthGuard } from '../../common/guards/auth.guard';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from 'src/common/guards/auth.guard';
 
 @Controller('users')
-//@UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
+@ApiBearerAuth()
 @UseFilters(UsersExceptionFilter)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -36,8 +37,6 @@ export class UsersController {
   }
 
   @Get()
-  @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN)
   @ApiOperation({
     summary: 'Get all users',
     description: 'Only Admins can get all users',

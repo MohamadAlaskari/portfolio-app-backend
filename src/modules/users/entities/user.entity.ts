@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '../../../common/utils/enums';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class User {
@@ -21,6 +22,7 @@ export class User {
   })
   email: string;
 
+  @Exclude()
   @Column()
   @ApiProperty({ description: 'Gehashtes Passwort' })
   password: string;
