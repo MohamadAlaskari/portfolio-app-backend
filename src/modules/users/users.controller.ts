@@ -16,10 +16,10 @@ import { UsersExceptionFilter } from './filters/users-exception.filter';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { UserRole } from '../../common/utils/enums';
 import { Roles } from '../../common/decorators/roles.decorator';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import { JWTPayloadTypes } from 'src/common/utils/types';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { JWTPayloadTypes } from '../../common/utils/types';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { AuthGuard } from 'src/common/guards/auth.guard';
+import { AuthGuard } from '../../common/guards/auth.guard';
 
 @Controller('users')
 @UseGuards(AuthGuard)
