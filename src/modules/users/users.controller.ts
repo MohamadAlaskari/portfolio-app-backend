@@ -37,6 +37,8 @@ export class UsersController {
   }
 
   @Get()
+  @Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
   @ApiOperation({
     summary: 'Get all users',
     description: 'Only Admins can get all users',
