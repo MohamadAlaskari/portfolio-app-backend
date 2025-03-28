@@ -16,10 +16,9 @@ import { UsersExceptionFilter } from './filters/users-exception.filter';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { UserRole } from '../../common/utils/enums';
 import { Roles } from '../../common/decorators/roles.decorator';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import { JWTPayloadTypes } from '../../common/utils/types';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from '../../common/guards/auth.guard';
+import { SelfOrAdminGuard } from '../../common/guards/self-or-admin.guard';
 
 @Controller('users')
 @UseGuards(AuthGuard)
@@ -65,6 +64,7 @@ export class UsersController {
   @Patch(':id')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.USER)
+  @UseGuards(SelfOrAdminGuard)
   @ApiOperation({
     summary: 'Update user',
     description:
@@ -75,20 +75,14 @@ export class UsersController {
     status: 403,
     description: 'Forbidden: You can only update your own profile.',
   })
-  update(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-    @CurrentUser() payload: JWTPayloadTypes,
-  ) {
-    if (payload.role !== UserRole.ADMIN && payload.id !== id) {
-      throw new Error('Access denied. You can only update your own profile.');
-    }
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.USER)
+  @UseGuards(SelfOrAdminGuard)
   @ApiOperation({
     summary: 'Delete user',
     description: 'Only Admins can delete a user.',
