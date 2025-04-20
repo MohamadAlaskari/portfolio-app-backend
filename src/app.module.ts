@@ -7,12 +7,13 @@ import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
     JwtModule,
     ConfigModule.forRoot({
-      envFilePath: ['.env', '.env.development'],
+      envFilePath: ['.env', '.env.development', '.env.production'],
       isGlobal: true,
     }),
     AuthModule,
@@ -20,6 +21,7 @@ import { JwtModule } from '@nestjs/jwt';
     UsersModule,
     CategoriesModule,
     ProjectsModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [],

@@ -1,7 +1,9 @@
 import {
   Controller,
   Post,
+  Get,
   Body,
+  Query,
   HttpCode,
   HttpStatus,
   UseGuards,
@@ -76,5 +78,10 @@ export class AuthController {
   })
   getCurrentUser(@CurrentUser() payload: JWTPayloadTypes) {
     return this.authService.getCurrentUser(payload.id);
+  }
+
+  @Get('verify-email')
+  async verifyEmail(@Query('token') token: string) {
+    return this.authService.verifyEmail(token);
   }
 }

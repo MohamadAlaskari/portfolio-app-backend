@@ -5,6 +5,7 @@ import {
   IsOptional,
   MinLength,
   IsEnum,
+  IsBoolean,
 } from 'class-validator';
 import { UserRole } from 'src/common/utils/enums';
 
@@ -55,4 +56,13 @@ export class CreateUserDto {
   })
   @IsEnum(UserRole)
   system_role: UserRole;
+
+  @ApiProperty({
+    description: 'Gibt an, ob die E-Mail-Adresse bestätigt wurde',
+    example: false,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isEmailVerified: boolean;
 }

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsBoolean,
   IsEmail,
   IsEnum,
   IsNotEmpty,
@@ -58,4 +59,13 @@ export class RegisterDto {
   })
   @IsEnum(UserRole)
   system_role: UserRole;
+
+  @ApiProperty({
+    description: 'Gibt an, ob die E-Mail-Adresse bestätigt wurde',
+    example: false,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isEmailVerified: boolean;
 }

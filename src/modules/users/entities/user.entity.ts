@@ -56,6 +56,13 @@ export class User {
   })
   system_role: UserRole;
 
+  @Column({ default: false })
+  @ApiProperty({
+    description: 'Gibt an, ob die E-Mail-Adresse des Benutzers bestätigt wurde',
+    example: false,
+  })
+  isEmailVerified: boolean;
+
   @CreateDateColumn()
   @ApiProperty({ description: 'Erstellungsdatum' })
   created_at: Date;
